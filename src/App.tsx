@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import Header from './components/Header';
 import ChatHistory, { IMessage } from './components/ChatHistory';
+import ChatInput from './components/ChatInput'
 import "./App.css";
 import {connect, sendMsg} from './api';
 
@@ -13,9 +14,14 @@ const App = () => {
     })
   });
 
-  const onSendMessage = () => {
-    sendMsg('Hello world!')
+  const onSendMessage = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.keyCode === 13) {
+      sendMsg(event.currentTarget.value)
+      event.currentTarget.value = ""
+    }
+    
   };
+
   return (
     <div className="App">
       <Container>
@@ -27,20 +33,11 @@ const App = () => {
           <ChatHistory chatHistory= {messages}/>
           </Col>
           <Col>
-            <Button
-              variant = 'info'
-              // size="xxl"
-              // onClick={onJoin}
-              >
-              Join
-            </Button>
+          <ChatInput send ={onSendMessage} />
           </Col>
         </Row>
         <Row>
           <Col>
-            <Button onClick={onSendMessage}>
-              send message
-            </Button>
           </Col>
         </Row>
       </Container>
