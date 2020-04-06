@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Button, Container, Row, Col } from "react-bootstrap";
+import {Container, Row, Col } from "react-bootstrap";
 import Header from './components/Header';
-import ChatHistory, { IMessage } from './components/ChatHistory';
+import ChatHistory from './components/ChatHistory';
 import ChatInput from './components/ChatInput'
 import "./App.css";
-import {connect, sendMsg} from './api';
+import {connect, sendMsg, IWebsocketMessage} from './api';
 
 const App = () => {
-  const [messages, setMessages] = useState<IMessage[]>([])
+  const [messages, setMessages] = useState<IWebsocketMessage[]>([])
   useEffect( () => {
     connect((message) => {
-      setMessages( [...messages, {id: messages.length, text: message}])
+      setMessages( [...messages, message])
     })
   });
 

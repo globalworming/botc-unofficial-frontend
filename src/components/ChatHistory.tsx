@@ -1,17 +1,14 @@
 import React from 'react'
-
-export interface IMessage {
-        id: number,
-        text: string
-}
+import { IWebsocketMessage } from '../api';
+import Message from './Message'
 
 interface IProps {
-    chatHistory: IMessage[]
+    chatHistory: IWebsocketMessage[]
 }
 
 const ChatHistory = (props: IProps) => {
     const messages = props.chatHistory.map((message) => (
-        <p key={message.id}>{message.text}</p> 
+        <Message message= {message}/>
     ));
 
     return (

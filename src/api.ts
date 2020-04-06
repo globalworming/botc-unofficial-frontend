@@ -6,7 +6,7 @@ export interface IWebsocketMessage {
     type: number,
     body: string
 }
-const connect = (callback: (message: string) => void) => {
+const connect = (callback: (message: IWebsocketMessage) => void) => {
     console.log("Attempting Connection...");
 
     socket.onopen = () => {
@@ -14,8 +14,8 @@ const connect = (callback: (message: string) => void) => {
     };
   
     socket.onmessage = msg => {
-      console.log(msg);
-      callback(msg.data);
+      console.log(msg.data);
+      callback(msg.data as IWebsocketMessage);
     };
   
     socket.onclose = event => {
