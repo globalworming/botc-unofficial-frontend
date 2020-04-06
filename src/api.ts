@@ -1,7 +1,11 @@
-import { string } from "yup";
+import { string, number } from "yup";
 
 const socket = new WebSocket('ws://localhost:8080/ws')
 
+export interface IWebsocketMessage {
+    type: number,
+    body: string
+}
 const connect = (callback: (message: string) => void) => {
     console.log("Attempting Connection...");
 
