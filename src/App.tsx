@@ -1,26 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { Button, Container, Row, Col } from "react-bootstrap";
+import Header from './components/Header';
+import ChatHistory, { IMessage } from './components/ChatHistory';
+import "./App.css";
+import {connect, sendMsg} from './api';
 
-function App() {
+const App = () => {
+  const [messages, setMessages] = useState<IMessage[]>([])
+  useEffect( () => {
+    connect((message) => {
+      setMessages( [...messages, {id: messages.length, text: message}])
+    })
+  });
+
+  const onSendMessage = () => {
+    sendMsg('Hello world!')
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Container>
+        <Row>
+          <Col>
+            <Header />
+          </Col>
+          <Col>
+          <ChatHistory chatHistory= {messages}/>
+          </Col>
+          <Col>
+            <Button
+              variant = 'info'
+              // size="xxl"
+              // onClick={onJoin}
+              >
+              Join
+            </Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button onClick={onSendMessage}>
+              send message
+            </Button>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
-}
-
+};
 export default App;
