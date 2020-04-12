@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {Container, Row, Col } from "react-bootstrap";
+import React, {useState, useEffect} from "react";
+import {Container, Row, Col} from "react-bootstrap";
 import Header from './components/Header';
 import ChatHistory from './components/ChatHistory';
 import ChatInput from './components/ChatInput'
@@ -8,9 +8,9 @@ import {connect, sendMsg, IWebsocketMessage} from './api';
 
 const App = () => {
   const [messages, setMessages] = useState<IWebsocketMessage[]>([])
-  useEffect( () => {
+  useEffect(() => {
     connect((message) => {
-      setMessages( [...messages, message])
+      setMessages([...messages, message])
     })
   });
 
@@ -19,7 +19,7 @@ const App = () => {
       sendMsg(event.currentTarget.value)
       event.currentTarget.value = ""
     }
-    
+
   };
 
   return (
@@ -27,13 +27,13 @@ const App = () => {
       <Container>
         <Row>
           <Col>
-            <Header />
+            <Header/>
           </Col>
           <Col>
-          <ChatHistory chatHistory= {messages}/>
+            <ChatHistory chatHistory={messages}/>
           </Col>
           <Col>
-          <ChatInput send ={onSendMessage} />
+            <ChatInput send={onSendMessage}/>
           </Col>
         </Row>
         <Row>
