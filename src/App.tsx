@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from "react";
-import {Container, Row, Col} from "react-bootstrap";
 import Header from './components/Header';
 import ChatHistory from './components/ChatHistory';
-import ChatInput from './components/ChatInput'
+import ChatInput from './components/ChatInput';
+import GameTable from './components/GameTable';
 import "./App.css";
 import {connect, sendMsg, IWebsocketMessage} from './api';
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
 const App = () => {
   const [messages, setMessages] = useState<IWebsocketMessage[]>([])
@@ -24,23 +25,14 @@ const App = () => {
 
   return (
     <div className="App">
-      <Container>
-        <Row>
-          <Col>
-            <Header/>
-          </Col>
-          <Col>
-            <ChatHistory chatHistory={messages}/>
-          </Col>
-          <Col>
-            <ChatInput send={onSendMessage}/>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-          </Col>
-        </Row>
-      </Container>
+      <Header/>
+      <Router>
+        <Switch>
+          <Route path="/gameTable/:id" children={<GameTable/>}/>
+        </Switch>
+      </Router>
+      <ChatHistory chatHistory={messages}/>
+      <ChatInput send={onSendMessage}/>
     </div>
   );
 };
