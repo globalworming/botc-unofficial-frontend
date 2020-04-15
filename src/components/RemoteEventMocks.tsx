@@ -1,6 +1,5 @@
 import React from "react";
 import Player from "../model/Player";
-import * as faker from 'faker';
 
 
 type Actions = {
@@ -13,7 +12,8 @@ const RemoteEventMocks = ({addPlayer}: Actions) => {
     if (e.keyCode != 13) return;
     addPlayer([{
       id: e.currentTarget.value + "",
-      character: "unassigned"
+      character: "unassigned",
+      ability: "not used"
     }])
     e.currentTarget.value = ""
   }
@@ -24,7 +24,7 @@ const RemoteEventMocks = ({addPlayer}: Actions) => {
     <button className={"addPlayer"} onClick={() => {
       const players: Array<Player> = [];
       ["peter", "dana", "bob", "jupiter", "strange"].forEach((item) =>
-        players.push({id: item, character: "unassigned"}))
+        players.push({id: item, character: "unassigned", ability: "not used"}))
       addPlayer(players)
   }}>add 5 players</button>
   </section>);

@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {useParams} from "react-router";
 import Button from "react-bootstrap/Button";
-import Characters from "../constants/Characters";
 import RemoteEventMocks from "./RemoteEventMocks";
 import Player from "../model/Player";
 import StartingCharacters from "./StartingCharacters";
+import PlayerSection from "./PlayerSection";
 
 const initialPlayers: Array<Player> = [];
 
@@ -23,6 +23,14 @@ const GameTable = () => {
     setPlayers(players.concat(player))
   }
   const nextTurn = () => {
+    const updatedPlayers: Array<Player> = [];
+    players.forEach(player => {
+      if (isNight && player.ability === "used daily ability" || isDay && player.ability === "used nightly ability") {
+        player.ability = "not used";
+      }
+      updatedPlayers.push(player)
+    });
+    setPlayers(updatedPlayers);
     setTurn(turn + 1)
   }
 
@@ -49,6 +57,17 @@ const GameTable = () => {
     setPlayers(updatedPlayers)
   }
 
+ function setAbility(playerId: string, value: string) {
+    const updatedPlayers: Array<Player> = [];
+    players.forEach(player => {
+      if (playerId === player.id) {
+        player.ability = value;
+      }
+      updatedPlayers.push(player)
+    });
+    setPlayers(updatedPlayers)
+  }
+
   const isTestId = id === "bdd-1";
   const isFirstNight = turn === 1;
   const isNight = turn % 2 === 1;
@@ -66,19 +85,9 @@ const GameTable = () => {
           {isDay && <span className={"day"} role="img" aria-label="day">🌇</span>}
           {isNight && <span className={"night"} role="img" aria-label="night">🌃</span>}
         </h2>
-        <h3>players</h3>
+        <h3>players ({players.length}):</h3>
         {!hasPlayers && <span className={"noPlayers"}>no players</span>}
-        {hasPlayers && players.map((player, i) =>
-          <>
-            <div key={i} className={"player player" + i}>
-              {player.id}
-              <select className={"isCharacter"} value={player.character} onChange={e => assignCharacter(player.id, e.target.value)}>
-                <option value="unassigned"></option>
-                {Characters.map((character, i) => <option key={i} value={character}>{character}</option>)}
-              </select>
-            </div>
-          </>
-        )}
+        {hasPlayers && players.map((player, i) => <PlayerSection player={player} index={i} actions={{assignCharacter, setAbility}}/>)}
       </section>
 
       <section className={"controls"}>
