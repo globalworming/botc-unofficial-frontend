@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 import {useParams} from "react-router";
 import Button from "react-bootstrap/Button";
-import Characters, {Townsfolk} from "../constants/Characters";
-import shuffle from "../seedShuffle";
+import Characters from "../constants/Characters";
 import RemoteEventMocks from "./RemoteEventMocks";
 import Player from "../model/Player";
 import StartingCharacters from "./StartingCharacters";
@@ -20,8 +19,8 @@ const GameTable = () => {
   const [turn, setTurn] = useState(0);
   const storyteller = "you";
 
-  const addPlayer = (player: Player) => {
-    setPlayers(players.concat([player]))
+  const addPlayer = (player: Player[]) => {
+    setPlayers(players.concat(player))
   }
   const nextTurn = () => {
     setTurn(turn + 1)
@@ -62,7 +61,11 @@ const GameTable = () => {
   return (
     <>
       <section className={"grimoire"}>
-        <h2>grimoire {id}</h2>
+        <h2>
+          grimoire {id}:
+          {isDay && <span className={"day"} role="img" aria-label="day">🌇</span>}
+          {isNight && <span className={"night"} role="img" aria-label="night">🌃</span>}
+        </h2>
         <h3>players</h3>
         {!hasPlayers && <span className={"noPlayers"}>no players</span>}
         {hasPlayers && players.map((player, i) =>
