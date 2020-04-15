@@ -20,16 +20,17 @@ export const Outsiders = [
   "Saint"
 ];
 
-const Characters = Townsfolk.concat(Outsiders, [
-  //Minions",
+export const Minions = [
   "Poisoner",
   "Spy",
   "Scarlet Woman",
   "Baron",
-  //Demons",
+];
+
+export const Demons = [
   "Imp",
-]);
+];
 
-
+const Characters = Townsfolk.concat(Outsiders, Minions, Demons);
 
 export default Characters;

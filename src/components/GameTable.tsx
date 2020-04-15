@@ -1,18 +1,16 @@
 import React, {useState} from 'react';
 import {useParams} from "react-router";
 import Button from "react-bootstrap/Button";
-import Characters, {Townsfolk} from "./Characters";
-import shuffle from "./seedShuffle";
+import Characters, {Townsfolk} from "../constants/Characters";
+import shuffle from "../seedShuffle";
+import RemoteEventMocks from "./RemoteEventMocks";
+import Player from "../model/Player";
+import StartingCharacters from "./StartingCharacters";
 
 const initialPlayers: Array<Player> = [];
 
 interface RouteParams {
   id: string
-}
-
-interface Player {
-  id: string
-  character: string
 }
 
 const GameTable = () => {
@@ -35,17 +33,8 @@ const GameTable = () => {
   }
 
   function assignCharacters() {
-    // TODO lookup how many of what type by player count
-    // TODO handle baron
-
-    // deterministic behavior for test ids
-    let seed = 0;
-    for (let i = 0; i <= id.length; i++) {
-      seed += id.charCodeAt(i);
-    }
-    const shuffledCharacters: Array<string> = shuffle(Characters, seed);
-    const assignableCharacters = shuffledCharacters.slice(0, players.length)
-    assignableCharacters.forEach((character, i) => {
+    const pickedCharacters = StartingCharacters.forNumberOfPlayers(players.length, isTestId ? id : undefined);
+    pickedCharacters.forEach((character, i) => {
       assignCharacter(players[i].id, character)
     })
   }
@@ -80,7 +69,7 @@ const GameTable = () => {
           <>
             <div key={i} className={"player player" + i}>
               {player.id}
-              <select value={player.character} onChange={e => assignCharacter(player.id, e.target.value)}>
+              <select className={"isCharacter"} value={player.character} onChange={e => assignCharacter(player.id, e.target.value)}>
                 <option value="unassigned"></option>
                 {Characters.map((character, i) => <option key={i} value={character}>{character}</option>)}
               </select>
@@ -108,27 +97,6 @@ const GameTable = () => {
       </section>
     </>
   );
-}
-
-type Actions = {
-  addPlayer: (player: Player) => void;
-}
-
-const RemoteEventMocks = ({addPlayer}: Actions) => {
-
-  const onEnterAddPlayer = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode != 13) return;
-    addPlayer({
-      id: e.currentTarget.value + "",
-      character: "unassigned"
-    })
-    e.currentTarget.value = ""
-  }
-
-  return (<section className={"mocks"}>
-    <h3>mock remote events</h3>
-    <label>addPlayer</label><input type="text" className={"addPlayer"} onKeyDown={e => onEnterAddPlayer(e)}/>
-  </section>);
 }
 
 export default GameTable;
