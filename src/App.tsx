@@ -6,6 +6,7 @@ import GameTable from './components/GameTable';
 import "./App.css";
 import {connect, sendMsg, IWebsocketMessage} from './api';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import TownSquare from "./components/TownSquare";
 
 const App = () => {
   const [messages, setMessages] = useState<IWebsocketMessage[]>([])
@@ -29,6 +30,7 @@ const App = () => {
       <Router>
         <Switch>
           <Route path="/gameTable/:id" children={<GameTable/>}/>
+          <Route path="/townSquare/:id" children={<TownSquare/>}/>
         </Switch>
       </Router>
       <ChatHistory chatHistory={messages}/>
