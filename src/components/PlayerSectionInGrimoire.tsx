@@ -8,22 +8,21 @@ interface PlayerSectionProps {
   actions: {
     assignCharacter: (playerId: string, character: string) => void
     setAbility: (playerId: string, value: string) => void
+    setUsedVote: (playerId: string, value: boolean) => void
+    setDead: (playerId: string, value: boolean) => void
   }
 }
 
-const PlayerSection = ({player, index, actions} : PlayerSectionProps) => {
+const PlayerSectionInGrimoire = ({player, index, actions} : PlayerSectionProps) => {
 
   const [poisoned, setPoisoned] = useState(false);
   const [mad, setMad] = useState(false);
-  const [dead, setDead] = useState(false);
-  const [usedVote, setUsedVote] = useState(false);
-
 
   return <section key={index} className={"player player" + index}>
     <h3>{player.id}</h3>
     <select className={"isCharacter"} value={player.character}
             onChange={e => actions.assignCharacter(player.id, e.target.value)}>
-      <option value="unassigned"></option>
+      <option value="unassigned">unassigned</option>
       {Characters.map((character, i) => <option key={i} value={character}>{character}</option>)}
     </select>
     <label className={"poisoned"}><span role="img" aria-label="poisoned">🤢</span>
@@ -33,10 +32,10 @@ const PlayerSection = ({player, index, actions} : PlayerSectionProps) => {
       <input name="mad" type="checkbox" checked={mad} onChange={(e) => setMad(e.target.checked)}/>
     </label>
     <label className={"dead"}><span role="img" aria-label="dead">👻</span>
-      <input name="dead" type="checkbox" checked={dead} onChange={(e) => setDead(e.target.checked)}/>
+      <input name="dead" type="checkbox" checked={player.dead} onChange={(e) => actions.setDead(player.id, e.target.checked)}/>
     </label>
-    {dead && <label className={"usedVote"}><span role="img" aria-label="usedVote">🗳️</span>
-      <input name="usedVote" type="checkbox" checked={!usedVote} onChange={(e) => setUsedVote(!e.target.checked)}/>
+    {player.dead && <label className={"usedVote"}><span role="img" aria-label="usedVote">🗳️</span>
+      <input name="usedVote" type="checkbox" checked={!player.usedVote} onChange={(e) => actions.setUsedVote(player.id, !e.target.checked)}/>
     </label>}
     <label> Ability
     <select className={"usedAbility"} value={player.ability}
@@ -50,4 +49,4 @@ const PlayerSection = ({player, index, actions} : PlayerSectionProps) => {
 
   </section>
 }
-export default PlayerSection
+export default PlayerSectionInGrimoire
