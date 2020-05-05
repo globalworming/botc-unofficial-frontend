@@ -104,11 +104,11 @@ const GameTable = () => {
     updateTownSquare()
   }
 
-  function setUsedVote(playerId: string, value: boolean) {
+  function setCanVote(playerId: string, value: boolean) {
     const updatedPlayers: Array<Player> = [];
     players.forEach(player => {
       if (playerId === player.id) {
-        player.usedVote = value;
+        player.canVote = value;
       }
       updatedPlayers.push(player)
     });
@@ -130,7 +130,7 @@ const GameTable = () => {
           assignCharacter,
           setAbility,
           setDead,
-          setUsedVote
+          setCanVote
         }}/>)}
       </section>
 

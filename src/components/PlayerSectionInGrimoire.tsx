@@ -8,7 +8,7 @@ interface PlayerSectionProps {
   actions: {
     assignCharacter: (playerId: string, character: string) => void
     setAbility: (playerId: string, value: string) => void
-    setUsedVote: (playerId: string, value: boolean) => void
+    setCanVote: (playerId: string, value: boolean) => void
     setDead: (playerId: string, value: boolean) => void
   }
 }
@@ -34,8 +34,8 @@ const PlayerSectionInGrimoire = ({player, index, actions} : PlayerSectionProps) 
     <label className={"dead"}><span role="img" aria-label="dead">👻</span>
       <input name="dead" type="checkbox" checked={player.dead} onChange={(e) => actions.setDead(player.id, e.target.checked)}/>
     </label>
-    {player.dead && <label className={"usedVote"}><span role="img" aria-label="usedVote">🗳️</span>
-      <input name="usedVote" type="checkbox" checked={!player.usedVote} onChange={(e) => actions.setUsedVote(player.id, !e.target.checked)}/>
+    {player.dead && <label className={"canVote"}><span role="img" aria-label="canVote">🗳️</span>
+      <input name="canVote" type="checkbox" checked={player.canVote} onChange={(e) => actions.setCanVote(player.id, e.target.checked)}/>
     </label>}
     <label> Ability
     <select className={"usedAbility"} value={player.ability}

@@ -3,7 +3,7 @@ interface Player {
   character: string,
   ability: string,
   dead: boolean,
-  usedVote: boolean,
+  canVote: boolean,
 }
 
 export default Player

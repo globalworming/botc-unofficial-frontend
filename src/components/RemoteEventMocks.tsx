@@ -7,7 +7,7 @@ type Actions = {
 }
 
 const NewPlayer = {
-  withName: (name: string) => { return {id: name, character: "unassigned", ability: "not used", dead: false, usedVote: false}}
+  withName: (name: string) => { return {id: name, character: "unassigned", ability: "not used", dead: false, canVote: true}}
 }
 
 const RemoteEventMocks = ({addPlayer}: Actions) => {
