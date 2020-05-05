@@ -19,7 +19,7 @@ const PlayerSectionInGrimoire = ({player, index, actions} : PlayerSectionProps) 
   const [mad, setMad] = useState(false);
 
   return <section key={index} className={"player player" + index}>
-    <h3>{player.id}</h3>
+    <h3 className={"name"}>{player.id}</h3>
     <select className={"isCharacter"} value={player.character}
             onChange={e => actions.assignCharacter(player.id, e.target.value)}>
       <option value="unassigned">unassigned</option>
