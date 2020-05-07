@@ -1,14 +1,16 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import Header from './components/Header';
-import ChatHistory from './components/ChatHistory';
-import ChatInput from './components/ChatInput';
+// import ChatHistory from './components/ChatHistory';
+// import ChatInput from './components/ChatInput';
 import GameTable from './components/GameTable';
+import Lobby from './components/Lobby';
 import "./App.css";
-import {connect, sendMsg, IWebsocketMessage} from './api';
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+// import {connect, sendMsg, IWebsocketMessage} from './api';
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import TownSquare from "./components/TownSquare";
 
 const App = () => {
+  /*
   const [messages, setMessages] = useState<IWebsocketMessage[]>([])
   useEffect(() => {
     connect((message) => {
@@ -22,7 +24,7 @@ const App = () => {
       event.currentTarget.value = ""
     }
 
-  };
+  };*/
 
   return (
     <div className="App">
@@ -33,8 +35,9 @@ const App = () => {
           <Route path="/townSquare/:id" children={<TownSquare/>}/>
         </Switch>
       </Router>
-      <ChatHistory chatHistory={messages}/>
-      <ChatInput send={onSendMessage}/>
+      {
+        //<ChatHistory chatHistory={messages}/><ChatInput send={onSendMessage}/>
+      }
     </div>
   );
 };
