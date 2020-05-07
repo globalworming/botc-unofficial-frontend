@@ -8,7 +8,6 @@ import PlayerSectionInGrimoire from "./PlayerSectionInGrimoire";
 import DayNightIcons from "./DayNightIcons";
 import TownSquare from "./TownSquare";
 import RouteParams from "../model/RouteParams";
-import TownSquareState from "../model/TownSquareState";
 
 const initialPlayers: Array<Player> = [];
 
@@ -17,54 +16,39 @@ const GameTable = () => {
   const {id} = useParams<RouteParams>();
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [turn, setTurn] = useState(0);
-  const [updatedAt, setUpdatedAt] = useState(Date.now());
+  const [isStoryTeller, setIsStoryTeller] = useState(false);
   const isTestId = id === "bdd-1";
-  const isFirstNight = turn === 1;
-  const isNight = turn % 2 === 1;
-  const isDay = turn !== 0 && !isNight;
+  const isDay = turn !== 0 && turn % 2 === 0;
 
   let hasPlayers = players.length !== 0;
 
-  const townSquareState: TownSquareState = {
-    players, isDay, isNight, turn, id, updatedAt
-  };
-
-  function getOrCreateGame(id: string) {
+  function getGame(id: string) {
     fetch('/api/gameTable/' + id)
       .then(response => response.json())
-      .then(response => alert(JSON.stringify(response, undefined, 2)))
+      .then(response => console.log('/api/gameTable/' + id, response))
       .catch(error => null);
   }
 
   useEffect(
     () => {
-      getOrCreateGame(id)
+      getGame(id)
     }
   )
-
-  useEffect(() => {
-    window.localStorage.setItem("botc-" + townSquareState.id, JSON.stringify(townSquareState))
-  }, [townSquareState])
 
   const addPlayer = (player: Player[]) => {
     setPlayers(players.concat(player))
   }
 
-  function updateTownSquare() {
-    setUpdatedAt(Date.now())
-  }
-
   const nextTurn = () => {
     const updatedPlayers: Array<Player> = [];
     players.forEach(player => {
-      if ((isNight && player.ability === "used daily ability") || (isDay && player.ability === "used nightly ability")) {
+      if ((isDay || player.ability === "used daily ability") || (isDay && player.ability === "used nightly ability")) {
         player.ability = "not used";
       }
       updatedPlayers.push(player)
     });
     setPlayers(updatedPlayers);
     setTurn(turn + 1)
-    updateTownSquare();
   }
 
   const startGame = () => {
@@ -110,7 +94,6 @@ const GameTable = () => {
       updatedPlayers.push(player)
     });
     setPlayers(updatedPlayers)
-    updateTownSquare()
   }
 
   function setCanVote(playerId: string, value: boolean) {
@@ -122,16 +105,15 @@ const GameTable = () => {
       updatedPlayers.push(player)
     });
     setPlayers(updatedPlayers)
-    updateTownSquare()
   }
 
-  const debug = {id, players, turn, isFirstNight, isNight, isDay};
+  const debug = {id, players, turn, isDay};
 
   return (
     <>
       <section className={"grimoire"}>
         <h2>
-          Grimoire {id}: <DayNightIcons isDay={isDay} isNight={isNight}/>
+          Grimoire {id}: <DayNightIcons isDay={isDay}/>
         </h2>
         <h3>players ({players.length}):</h3>
         {!hasPlayers && <span className={"noPlayers"}>no players</span>}
@@ -147,11 +129,11 @@ const GameTable = () => {
         <h2>game controls</h2>
         {turn === 0 &&
         <Button className={"startGame"} onClick={() => startGame()}>start game when all players are present</Button>}
-        {isNight && <Button className={"startNextDay"} onClick={() => nextTurn()}>start the next day</Button>}
+        {isDay || <Button className={"startNextDay"} onClick={() => nextTurn()}>start the next day</Button>}
         {isDay && <Button className={"startNextNight"} onClick={() => nextTurn()}>start the next night</Button>}
       </section>
 
-      <TownSquare/>
+      <TownSquare id={id} isDay={isDay} players={players} turn={turn} isStoryTeller={isStoryTeller}/>
 
       <section className={"gameTableProperties"}>
         <h3>debug info</h3>

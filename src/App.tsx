@@ -7,7 +7,6 @@ import Lobby from './components/Lobby';
 import "./App.css";
 // import {connect, sendMsg, IWebsocketMessage} from './api';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import TownSquare from "./components/TownSquare";
 
 const App = () => {
   /*
@@ -32,7 +31,6 @@ const App = () => {
       <Router>
         <Switch>
           <Route path="/gameTable/:id" children={<GameTable/>}/>
-          <Route path="/townSquare/:id" children={<TownSquare/>}/>
           <Route path="/" children={<Lobby/>}/>
         </Switch>
       </Router>
