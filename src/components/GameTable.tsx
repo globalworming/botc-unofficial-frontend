@@ -21,21 +21,17 @@ const GameTable = () => {
   const isTestId = id === "bdd-1";
   const isFirstNight = turn === 1;
   const isNight = turn % 2 === 1;
-  const isDay = turn != 0 && !isNight;
+  const isDay = turn !== 0 && !isNight;
 
-  let hasPlayers = players.length != 0;
+  let hasPlayers = players.length !== 0;
 
   const townSquareState: TownSquareState = {
     players, isDay, isNight, turn, id, updatedAt
   };
 
-  function persistTownSquareToLocalStorage() {
-    window.localStorage.setItem("botc-" + id, JSON.stringify(townSquareState))
-  }
-
   useEffect(() => {
-    persistTownSquareToLocalStorage();
-  }, [townSquareState.updatedAt])
+    window.localStorage.setItem("botc-" + townSquareState.id, JSON.stringify(townSquareState))
+  }, [townSquareState])
 
   const addPlayer = (player: Player[]) => {
     setPlayers(players.concat(player))

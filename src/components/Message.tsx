@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './Message.scss';
-import { IWebsocketMessage } from '../api';
+import {IWebsocketMessage} from '../api';
 
 interface IProps {
     message: IWebsocketMessage

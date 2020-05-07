@@ -1,5 +1,3 @@
-import { string, number } from "yup";
-
 const socket = new WebSocket('ws://localhost:8080/ws')
 
 export interface IWebsocketMessage {

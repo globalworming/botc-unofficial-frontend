@@ -13,7 +13,7 @@ const NewPlayer = {
 const RemoteEventMocks = ({addPlayer}: Actions) => {
 
   const onEnterAddPlayer = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode != 13) return;
+    if (e.keyCode !== 13) return;
     addPlayer([NewPlayer.withName(e.currentTarget.value)]);
     e.currentTarget.value = ""
   }
