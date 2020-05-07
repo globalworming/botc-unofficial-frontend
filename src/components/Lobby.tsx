@@ -9,7 +9,10 @@ const Lobby = () => {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setRedirect(true)
+    fetch("/api/gameTables?id=" + name , {method: 'post'})
+      .then(response => response.json())
+      .then(response => response.id === name ? setRedirect(true) : null)
+      .catch(error => null);
   }
 
   if (redirect) {

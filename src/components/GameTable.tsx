@@ -8,6 +8,7 @@ import PlayerSectionInGrimoire from "./PlayerSectionInGrimoire";
 import DayNightIcons from "./DayNightIcons";
 import TownSquare from "./TownSquare";
 import RouteParams from "../model/RouteParams";
+import TownSquareState from "../model/TownSquareState";
 
 const initialPlayers: Array<Player> = [];
 
@@ -17,22 +18,29 @@ const GameTable = () => {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [turn, setTurn] = useState(0);
   const [isStoryTeller, setIsStoryTeller] = useState(false);
+  const [isDay, setIsDay] = useState(false);
   const isTestId = id === "bdd-1";
-  const isDay = turn !== 0 && turn % 2 === 0;
 
   let hasPlayers = players.length !== 0;
+
+  function apply(response: TownSquareState) {
+    setPlayers(response.players)
+    setTurn(response.turn)
+    setIsStoryTeller(response.isStoryTeller)
+    setIsDay(turn !== 0 && turn % 2 == 0)
+  }
 
   function getGame(id: string) {
     fetch('/api/gameTable/' + id)
       .then(response => response.json())
-      .then(response => console.log('/api/gameTable/' + id, response))
+      .then(response => apply(response))
       .catch(error => null);
   }
 
   useEffect(
     () => {
       getGame(id)
-    }
+    }, []
   )
 
   const addPlayer = (player: Player[]) => {
@@ -111,29 +119,32 @@ const GameTable = () => {
 
   return (
     <>
-      <section className={"grimoire"}>
-        <h2>
-          Grimoire {id}: <DayNightIcons isDay={isDay}/>
-        </h2>
-        <h3>players ({players.length}):</h3>
-        {!hasPlayers && <span className={"noPlayers"}>no players</span>}
-        {hasPlayers && players.map((player, i) => <PlayerSectionInGrimoire player={player} index={i} actions={{
-          assignCharacter,
-          setAbility,
-          setDead,
-          setCanVote
-        }}/>)}
-      </section>
+      {isStoryTeller && <>
+        <section className={"grimoire"}>
+          <h2>
+            Grimoire {id}: <DayNightIcons isDay={isDay}/>
+          </h2>
+          <h3>players ({players.length}):</h3>
+          {!hasPlayers && <span className={"noPlayers"}>no players</span>}
+          {hasPlayers && players.map((player, i) => <PlayerSectionInGrimoire player={player} index={i} actions={{
+            assignCharacter,
+            setAbility,
+            setDead,
+            setCanVote
+          }}/>)}
+        </section>
 
-      <section className={"controls"}>
-        <h2>game controls</h2>
-        {turn === 0 &&
-        <Button className={"startGame"} onClick={() => startGame()}>start game when all players are present</Button>}
-        {isDay || <Button className={"startNextDay"} onClick={() => nextTurn()}>start the next day</Button>}
-        {isDay && <Button className={"startNextNight"} onClick={() => nextTurn()}>start the next night</Button>}
-      </section>
+        <section className={"controls"}>
+          <h2>game controls</h2>
+          {turn === 0 &&
+          <Button className={"startGame"} onClick={() => startGame()}>start game when all players are present</Button>}
+          {isDay || <Button className={"startNextDay"} onClick={() => nextTurn()}>start the next day</Button>}
+          {isDay && <Button className={"startNextNight"} onClick={() => nextTurn()}>start the next night</Button>}
+        </section>
+      </>}
 
-      <TownSquare id={id} isDay={isDay} players={players} turn={turn} isStoryTeller={isStoryTeller}/>
+
+      {!isStoryTeller && <TownSquare id={id} isDay={isDay} players={players} turn={turn} isStoryTeller={isStoryTeller}/>}
 
       <section className={"gameTableProperties"}>
         <h3>debug info</h3>
