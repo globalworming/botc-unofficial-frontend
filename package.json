@@ -10,6 +10,7 @@
     "@types/socket.io-client": "^1.4.32",
     "@types/websocket": "^1.0.0",
     "@types/yup": "^0.26.33",
+    "http-proxy-middleware": "^1.0.3",
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",

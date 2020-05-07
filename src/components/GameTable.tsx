@@ -29,6 +29,19 @@ const GameTable = () => {
     players, isDay, isNight, turn, id, updatedAt
   };
 
+  function getOrCreateGame(id: string) {
+    fetch('/api/gameTable/' + id)
+      .then(response => response.json())
+      .then(response => alert(JSON.stringify(response, undefined, 2)))
+      .catch(error => null);
+  }
+
+  useEffect(
+    () => {
+      getOrCreateGame(id)
+    }
+  )
+
   useEffect(() => {
     window.localStorage.setItem("botc-" + townSquareState.id, JSON.stringify(townSquareState))
   }, [townSquareState])
