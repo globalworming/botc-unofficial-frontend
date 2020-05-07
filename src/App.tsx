@@ -33,6 +33,7 @@ const App = () => {
         <Switch>
           <Route path="/gameTable/:id" children={<GameTable/>}/>
           <Route path="/townSquare/:id" children={<TownSquare/>}/>
+          <Route path="/" children={<Lobby/>}/>
         </Switch>
       </Router>
       {

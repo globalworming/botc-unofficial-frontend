@@ -20,7 +20,7 @@ const RemoteEventMocks = ({addPlayer}: Actions) => {
 
   return (<section className={"mocks"}>
     <h3>mock remote events</h3>
-    <label>addPlayer</label><input type="text" className={"addPlayer"} onKeyDown={e => onEnterAddPlayer(e)}/>
+    <label>addPlayer<input type="text" className={"addPlayer"} onKeyDown={e => onEnterAddPlayer(e)}/></label>
     <button className={"addPlayer"} onClick={() => {
       const players: Array<Player> = [];
       ["peter", "dana", "bob", "jupiter", "strange"].forEach((name) =>
