@@ -9,8 +9,8 @@ const GrimoireControls = () => {
   const [isDay, setIsDay] = useGlobalState("isDay");
   const [turn, setTurn] = useGlobalState("turn");
   const [players, setPlayers] = useGlobalState("players");
-  const [isTestGameTable, setIsTestGameTable] = useGlobalState('isTestGameTable');
-  const [gameTableId, setGameTableId] = useGlobalState("gameTableId");
+  const [isTestGameTable] = useGlobalState('isTestGameTable');
+  const [gameTableId] = useGlobalState("gameTableId");
 
   const nextTurn = () => {
     const update: Array<Player> = Object.assign([], players);

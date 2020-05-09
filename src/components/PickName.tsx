@@ -6,8 +6,8 @@ const PickName = () => {
 
   const [you, setYou] = useGlobalState('you');
   const [localYou, setLocalYou] = useState(you)
-  const [gameTableId, setGameTableId] = useGlobalState("gameTableId");
-  const [players, setPlayers] = useGlobalState("players");
+  const [gameTableId] = useGlobalState("gameTableId");
+  const [, setPlayers] = useGlobalState("players");
 
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {

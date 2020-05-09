@@ -6,9 +6,9 @@ import {useGlobalState} from "../state";
 
 const TownSquare = () => {
 
-  const [players, setPlayers] = useGlobalState('players');
-  const [gameTableId, setGameTableId] = useGlobalState("gameTableId");
-  const [turn, setTurn] = useGlobalState("turn");
+  const [players] = useGlobalState('players');
+  const [gameTableId] = useGlobalState("gameTableId");
+  const [turn] = useGlobalState("turn");
 
   return (<>
     <section className={"townSquare"}>
