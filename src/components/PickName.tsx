@@ -12,7 +12,6 @@ const PickName = () => {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("submit", localYou)
     fetch('/api/gameTable/' + gameTableId + '/players?name=' + localYou, {method: "post"})
       .then(response => response.json())
       .then(response => apply(response))

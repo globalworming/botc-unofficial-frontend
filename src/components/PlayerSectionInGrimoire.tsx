@@ -2,10 +2,13 @@ import Characters from "../constants/Characters";
 import React from "react";
 import {useGlobalState} from "../state";
 import Player from "../model/Player";
+import TownSquareState from "../model/TownSquareState";
 
 const PlayerSectionInGrimoire = () => {
 
   const [players, setPlayers] = useGlobalState("players");
+  const [isTestGameTable, setIsTestGameTable] = useGlobalState('isTestGameTable');
+  const [gameTableId, setGameTableId] = useGlobalState("gameTableId");
 
   function assignCharacter(id: string, value: string) {
     const update: Array<Player> = Object.assign([], players);
@@ -41,6 +44,11 @@ const PlayerSectionInGrimoire = () => {
       player.dead = value
       setPlayers(update)
     }
+    if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/player/' + id + "/kill", {method: "post"})
+      .then(response => response.json())
+      .then(response => apply(response))
+      .catch(error => null);
+
   }
 
   function setCanVote(id: string, value: boolean) {
@@ -50,6 +58,11 @@ const PlayerSectionInGrimoire = () => {
       player.canVote = value
       setPlayers(update)
     }
+    if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/player/' + id + "/voted", {method: "post"})
+      .then(response => response.json())
+      .then(response => apply(response))
+      .catch(error => null);
+
   }
   function setAbility(id: string, value: string) {
     const update: Array<Player> = Object.assign([], players);
@@ -59,6 +72,11 @@ const PlayerSectionInGrimoire = () => {
       setPlayers(update)
     }
   }
+
+  function apply(response: TownSquareState) {
+    setPlayers(response.players)
+  }
+
 
   return ( <> {
     players.map((player, index) =>

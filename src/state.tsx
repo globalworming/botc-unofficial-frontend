@@ -5,7 +5,7 @@ const initialPlayers: Array<Player> = [];
 
 
 export const { useGlobalState } = createGlobalState({
-  isDay: false,
+  isDay: true,
   isStoryTeller: true,
   isTestGameTable: false,
   gameTableId: "",

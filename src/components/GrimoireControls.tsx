@@ -3,6 +3,7 @@ import Player from "../model/Player";
 import StartingCharacters from "./StartingCharacters";
 import Button from "react-bootstrap/Button";
 import React from "react";
+import TownSquareState from "../model/TownSquareState";
 
 const GrimoireControls = () => {
 
@@ -22,12 +23,25 @@ const GrimoireControls = () => {
     setPlayers(update);
     setTurn(turn + 1)
     setIsDay(!isDay)
+    if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/nextTurn', {method: "post"})
+      .then(response => response.json())
+      .then(response => apply(response))
+      .catch(error => null);
+  }
+
+  function apply(response: TownSquareState) {
+    setIsDay(response.isDay)
+    setTurn(response.turn)
   }
 
   const startGame = () => {
     assignCharacters();
     nextTurn()
-    setIsDay(false)
+    if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/start', {method: "post"})
+      .then(response => response.json())
+      .then(response => apply(response))
+      .catch(error => null);
+
   }
 
   function assignCharacters() {

@@ -102,7 +102,7 @@ const GameTable = () => {
   const debug = {gameTableId, players, turn, isDay, isStoryTeller, you};
   return (
     <>
-      <a href={"/gameTable/" + gameTableId}>invite link</a>
+      {turn === 0 && <a href={"/gameTable/" + gameTableId}>invite link</a>}
       {isStoryTeller && <>
         <section className={"grimoire"}>
           <h2>
@@ -121,7 +121,7 @@ const GameTable = () => {
       {(!isStoryTeller || isTestGameTable) && <TownSquare/>}
 
       <section className={"gameTableProperties"}>
-        <h3>debug info</h3>
+        <h2>debug info</h2>
         <dl>
           {Object.entries(debug).map((t, k) => <React.Fragment key={k}>
             <dt key={"dt" + k}>{t[0]}:</dt>
