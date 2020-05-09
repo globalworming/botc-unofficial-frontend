@@ -10,8 +10,7 @@ import RouteParams from "../model/RouteParams";
 import GrimoireControls from "./GrimoireControls";
 import TownSquareState from "../model/TownSquareState";
 import {useGlobalState} from "../state";
-import {Client, IMessage, Message} from '@stomp/stompjs';
-import {IMessageEvent} from "websocket";
+import {Client, IMessage} from '@stomp/stompjs';
 
 const GameTable = () => {
   const {id} = useParams<RouteParams>();
@@ -60,8 +59,7 @@ const GameTable = () => {
   function listenForUpdates() {
     client.onConnect = function(frame) {
       console.log('Additional details:',frame.headers, frame.body, frame.command);
-      client.subscribe("/topic/public", (m: IMessage) => {
-        console.log("message!", m.body, m.headers)
+      client.subscribe("/topic/gameTable/" + id + "/updates", (m: IMessage) => {
         setFetchNewData(fetchNewData + 1)
       })
       // Do something, all subscribes must be done is this callback
@@ -98,7 +96,7 @@ const GameTable = () => {
   const debug = {gameTableId, players, turn, isDay, isStoryTeller, you};
   return (
     <>
-      <a href={"/gameTable/" + gameTableId}>link to this page</a>
+      <a href={"/gameTable/" + gameTableId}>invite link</a>
       {isStoryTeller && <>
         <section className={"grimoire"}>
           <h2>
