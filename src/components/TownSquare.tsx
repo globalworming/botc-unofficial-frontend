@@ -12,7 +12,7 @@ const TownSquare = () => {
 
   return (<>
     <section className={"townSquare"}>
-      <h3>Town Square {gameTableId}: <DayNightIcons/></h3>
+      <h2>Town Square {gameTableId}: <DayNightIcons/></h2>
       {turn === 0 && <span>waiting for storyteller to start the game</span>}
       {players.map((player: Player, i: number) =>
         <PlayerSectionInTownSquare key={i} player={player} index={i}/>)}

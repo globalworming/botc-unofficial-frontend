@@ -10,13 +10,14 @@ import RouteParams from "../model/RouteParams";
 import GrimoireControls from "./GrimoireControls";
 import TownSquareState from "../model/TownSquareState";
 import {useGlobalState} from "../state";
-import {Client, IMessage} from '@stomp/stompjs';
+import {Client, IMessage, StompSubscription} from '@stomp/stompjs';
 
 const GameTable = () => {
   const {id} = useParams<RouteParams>();
   const [isTestGameTable, setIsTestGameTable] = useGlobalState('isTestGameTable');
   const [gameTableId, setGameTableId] = useGlobalState("gameTableId");
   const [fetchNewData, setFetchNewData] = useState(0);
+  const [channel, setChannel] = useState<StompSubscription>();
 
   if (!gameTableId && id === "bdd-1") {
     setIsTestGameTable(true)
@@ -29,20 +30,24 @@ const GameTable = () => {
   const [isDay, setIsDay] = useGlobalState("isDay");
   const [you, setYou] = useGlobalState('you');
 
-  useEffect(
-    () => {
+  useEffect(() => {
       if (isTestGameTable) return
       getGame()
       listenForUpdates()
+      return () => {
+        channel?.unsubscribe();
+      };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchNewData]
-  )
+  );
 
   function getGame() {
     console.log("fetching game")
     fetch('/api/gameTable/' + id)
       .then(response => response.json())
-      .then(response => {apply(response)})
+      .then(response => {
+        apply(response)
+      })
       .catch(error => null);
   }
 
@@ -59,9 +64,10 @@ const GameTable = () => {
   function listenForUpdates() {
     client.onConnect = function(frame) {
       console.log('Additional details:',frame.headers, frame.body, frame.command);
-      client.subscribe("/topic/gameTable/" + id + "/updates", (m: IMessage) => {
+      const stompSubscription = client.subscribe("/topic/gameTable/" + id + "/updates", (m: IMessage) => {
         setFetchNewData(fetchNewData + 1)
-      })
+      });
+      setChannel(stompSubscription)
       // Do something, all subscribes must be done is this callback
       // This is needed because this will be executed after a (re)connect
     };
