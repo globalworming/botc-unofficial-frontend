@@ -1,32 +1,40 @@
-import React from "react";
+import React, {useState} from "react";
 import Player from "../model/Player";
-
 
 type Actions = {
   addPlayer: (player: Player[]) => void;
 }
 
 const NewPlayer = {
-  withName: (name: string) => { return {id: name, character: "unassigned", ability: "not used", dead: false, canVote: true}}
+  withName: (name: string) => {
+    return {name, character: "unassigned", ability: "not used", dead: false, canVote: true, poisoned: false, mad: false}
+  }
 }
 
 const RemoteEventMocks = ({addPlayer}: Actions) => {
 
-  const onEnterAddPlayer = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode !== 13) return;
-    addPlayer([NewPlayer.withName(e.currentTarget.value)]);
-    e.currentTarget.value = ""
+  const [playerName, setPlayerName]  = useState("")
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    addPlayer([NewPlayer.withName(playerName)]);
+    setPlayerName("")
   }
 
   return (<section className={"mocks"}>
     <h3>mock remote events</h3>
-    <label>addPlayer<input type="text" className={"addPlayer"} onKeyDown={e => onEnterAddPlayer(e)}/></label>
-    <button className={"addPlayer"} onClick={() => {
-      const players: Array<Player> = [];
-      ["peter", "dana", "bob", "jupiter", "strange"].forEach((name) =>
-        players.push(NewPlayer.withName(name)))
-      addPlayer(players)
-  }}>add 5 players</button>
+    <form onSubmit={e => handleSubmit(e)}>
+      <fieldset>
+        <label>addPlayer
+          <input type="text" className={"addPlayer"} value={playerName} onChange={(e) => setPlayerName(e.target.value)}/>
+        </label>
+      </fieldset>
+    </form>
+
+    <button onClick={() => addPlayer(["peter", "dana", "bob", "jupiter", "strange"]
+      .map((name) => NewPlayer.withName(name)))
+    }>add 5 players
+    </button>
   </section>);
 }
 export default RemoteEventMocks

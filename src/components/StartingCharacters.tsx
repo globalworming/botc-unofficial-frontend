@@ -55,8 +55,8 @@ function initialCharacters(numberOfPlayers: number, id?: string) {
 }
 
 const StartingCharacters = {
-  forNumberOfPlayers : (numberOfPlayers: number, testId?: string) => {
-    return initialCharacters(numberOfPlayers, testId || undefined)
+  forNumberOfPlayers : (numberOfPlayers: number, seed?: string) => {
+    return initialCharacters(numberOfPlayers, seed || undefined)
   }
 }
 

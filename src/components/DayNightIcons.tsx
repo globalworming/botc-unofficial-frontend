@@ -1,10 +1,9 @@
 import React from "react";
+import {useGlobalState} from "../state";
 
-interface DayNightProps {
-  isDay: boolean,
-}
+const DayNightIcons = () => {
+  const [isDay, setIsDay] = useGlobalState("isDay");
 
-const DayNightIcons = ({isDay}: DayNightProps) => {
   return (<>{isDay && <span className={"day"} role="img" aria-label="day">🌇</span>}
   {isDay || <span className={"night"} role="img" aria-label="night">🌃</span>}</>)
 }

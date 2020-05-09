@@ -1,6 +1,7 @@
 import Player from "./Player";
 
 interface TownSquareState {
+  you: string
   players: Array<Player>
   isDay:  boolean,
   turn: number,

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useParams} from "react-router";
 import Button from "react-bootstrap/Button";
 import RemoteEventMocks from "./RemoteEventMocks";
@@ -7,28 +7,32 @@ import StartingCharacters from "./StartingCharacters";
 import PlayerSectionInGrimoire from "./PlayerSectionInGrimoire";
 import DayNightIcons from "./DayNightIcons";
 import TownSquare from "./TownSquare";
+import PickName from "./PickName";
 import RouteParams from "../model/RouteParams";
+import GrimoireControls from "./GrimoireControls";
 import TownSquareState from "../model/TownSquareState";
+import {useGlobalState} from "../state";
 
-const initialPlayers: Array<Player> = [];
 
 const GameTable = () => {
+  const {id} = useParams<RouteParams>()
+  const [gameTableId, setGameTableId] = useGlobalState("gameTableId");
+  const [players, setPlayers] = useGlobalState("players");
+  const [turn, setTurn] = useGlobalState("turn");
+  const [isStoryTeller, setIsStoryTeller] = useGlobalState("isStoryTeller");
+  const [isDay, setIsDay] = useGlobalState("isDay");
+  const [you, setYou] = useGlobalState('you');
+  const [isTestGameTable, setIsTestGameTable] = useGlobalState('isTestGameTable');
 
-  const {id} = useParams<RouteParams>();
-  const [players, setPlayers] = useState<Player[]>(initialPlayers);
-  const [turn, setTurn] = useState(0);
-  const [isStoryTeller, setIsStoryTeller] = useState(false);
-  const [isDay, setIsDay] = useState(false);
-  const isTestId = id === "bdd-1";
-
-  let hasPlayers = players.length !== 0;
-
-  function apply(response: TownSquareState) {
-    setPlayers(response.players)
-    setTurn(response.turn)
-    setIsStoryTeller(response.isStoryTeller)
-    setIsDay(turn !== 0 && turn % 2 == 0)
-  }
+  useEffect(
+    () => {
+      if (id === "bdd-1") {
+        setIsTestGameTable(true)
+        return setGameTableId(id);
+      }
+      getGame(id)
+    }, []
+  )
 
   function getGame(id: string) {
     fetch('/api/gameTable/' + id)
@@ -37,114 +41,40 @@ const GameTable = () => {
       .catch(error => null);
   }
 
-  useEffect(
-    () => {
-      getGame(id)
-    }, []
-  )
+  function apply(response: TownSquareState) {
+    setPlayers(response.players)
+    setTurn(response.turn)
+    setIsStoryTeller(response.isStoryTeller)
+    setYou(response.you)
+    setGameTableId(response.id)
+    setIsDay(response.turn > 0 && response.turn % 2 === 0)
+  }
 
   const addPlayer = (player: Player[]) => {
     setPlayers(players.concat(player))
   }
 
-  const nextTurn = () => {
-    const updatedPlayers: Array<Player> = [];
-    players.forEach(player => {
-      if ((isDay || player.ability === "used daily ability") || (isDay && player.ability === "used nightly ability")) {
-        player.ability = "not used";
-      }
-      updatedPlayers.push(player)
-    });
-    setPlayers(updatedPlayers);
-    setTurn(turn + 1)
-  }
-
-  const startGame = () => {
-    assignCharacters();
-    nextTurn()
-  }
-
-  function assignCharacters() {
-    const pickedCharacters = StartingCharacters.forNumberOfPlayers(players.length, isTestId ? id : undefined);
-    pickedCharacters.forEach((character, i) => {
-      assignCharacter(players[i].id, character)
-    })
-  }
-
-  function assignCharacter(playerId: string, character: string) {
-    const updatedPlayers: Array<Player> = [];
-    players.forEach(player => {
-      if (playerId === player.id) {
-        player.character = character;
-      }
-      updatedPlayers.push(player)
-    });
-    setPlayers(updatedPlayers)
-  }
-
-  function setAbility(playerId: string, value: string) {
-    const updatedPlayers: Array<Player> = [];
-    players.forEach(player => {
-      if (playerId === player.id) {
-        player.ability = value;
-      }
-      updatedPlayers.push(player)
-    });
-    setPlayers(updatedPlayers)
-  }
-
-  function setDead(playerId: string, value: boolean) {
-    const updatedPlayers: Array<Player> = [];
-    players.forEach(player => {
-      if (playerId === player.id) {
-        player.dead = value;
-      }
-      updatedPlayers.push(player)
-    });
-    setPlayers(updatedPlayers)
-  }
-
-  function setCanVote(playerId: string, value: boolean) {
-    const updatedPlayers: Array<Player> = [];
-    players.forEach(player => {
-      if (playerId === player.id) {
-        player.canVote = value;
-      }
-      updatedPlayers.push(player)
-    });
-    setPlayers(updatedPlayers)
-  }
-
-  const debug = {id, players, turn, isDay};
-
+  const hasPlayers = players.length !== 0;
+  const debug = {gameTableId, players, turn, isDay, isStoryTeller, you};
   return (
     <>
+      <a href={"/gameTable/" + gameTableId}>link to this page</a>
       {isStoryTeller && <>
         <section className={"grimoire"}>
           <h2>
-            Grimoire {id}: <DayNightIcons isDay={isDay}/>
+            Grimoire {gameTableId}: <DayNightIcons/>
           </h2>
           <h3>players ({players.length}):</h3>
           {!hasPlayers && <span className={"noPlayers"}>no players</span>}
-          {hasPlayers && players.map((player, i) => <PlayerSectionInGrimoire player={player} index={i} actions={{
-            assignCharacter,
-            setAbility,
-            setDead,
-            setCanVote
-          }}/>)}
+          {hasPlayers && <PlayerSectionInGrimoire/>}
         </section>
 
-        <section className={"controls"}>
-          <h2>game controls</h2>
-          {turn === 0 &&
-          <Button className={"startGame"} onClick={() => startGame()}>start game when all players are present</Button>}
-          {isDay || <Button className={"startNextDay"} onClick={() => nextTurn()}>start the next day</Button>}
-          {isDay && <Button className={"startNextNight"} onClick={() => nextTurn()}>start the next night</Button>}
-        </section>
+        <GrimoireControls/>
       </>}
 
 
-      {!isStoryTeller && <TownSquare id={id} isDay={isDay} players={players} turn={turn} isStoryTeller={isStoryTeller}/>}
+      {!isStoryTeller && you.length === 0 && <PickName/>}
+      {(!isStoryTeller || isTestGameTable) && <TownSquare/>}
 
       <section className={"gameTableProperties"}>
         <h3>debug info</h3>
@@ -156,7 +86,7 @@ const GameTable = () => {
             </dd>
           </React.Fragment>)}
         </dl>
-        {isTestId && <RemoteEventMocks addPlayer={addPlayer}/>}
+        {isTestGameTable && <RemoteEventMocks addPlayer={addPlayer}/>}
       </section>
     </>
   );

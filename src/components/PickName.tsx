@@ -1,0 +1,43 @@
+import React, {useState} from "react";
+import {useGlobalState} from "../state";
+import TownSquareState from "../model/TownSquareState";
+
+const PickName = () => {
+
+  const [you, setYou] = useGlobalState('you');
+  const [localYou, setLocalYou] = useState(you)
+  const [gameTableId, setGameTableId] = useGlobalState("gameTableId");
+  const [players, setPlayers] = useGlobalState("players");
+
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    console.log("submit", localYou)
+    fetch('/api/gameTable/' + gameTableId + '/players?name=' + localYou, {method: "post"})
+      .then(response => response.json())
+      .then(response => apply(response))
+      .catch(error => null);
+  }
+
+  function apply(response: TownSquareState) {
+    setPlayers(response.players)
+    return setYou(response.you);
+  }
+
+
+  return (
+    <section className={"enterName"}>
+      <h3>pick a name to join game</h3>
+      <form onSubmit={e => handleSubmit(e)}>
+        <fieldset>
+          <label>name
+            <input type="text" value={localYou} onChange={(e) => setLocalYou(e.target.value)}/>
+          </label>
+        </fieldset>
+      </form>
+    </section>
+  )
+}
+
+export default PickName
+

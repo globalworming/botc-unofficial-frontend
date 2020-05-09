@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Redirect} from "react-router";
+import TownSquareState from "../model/TownSquareState";
 
 
 const Lobby = () => {
@@ -11,8 +12,14 @@ const Lobby = () => {
     e.preventDefault();
     fetch("/api/gameTables?id=" + name , {method: 'post'})
       .then(response => response.json())
-      .then(response => response.id === name ? setRedirect(true) : null)
+      .then(response => apply(response))
       .catch(error => null);
+  }
+
+  function apply(response: TownSquareState) {
+    if (response.id === name) {
+      setRedirect(true)
+    }
   }
 
   if (redirect) {

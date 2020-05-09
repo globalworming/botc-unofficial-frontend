@@ -13,7 +13,7 @@ const CanVote = () => <span className={"canVote"}>can vote</span>
 
 const PlayerSectionInTownSquare = ({player, index} : PlayerSectionProps) => {
   return <section key={index} className={"player player" + index}>
-    <h3><span className={"name"}>{player.id}</span> {player.dead ? <Dead/> : <Alive/>} {player.dead && (player.canVote ? <CanVote/> : <VoteUsed/>)}</h3>
+    <h3><span className={"name"}>{player.name}</span> {player.dead ? <Dead/> : <Alive/>} {player.dead && (player.canVote ? <CanVote/> : <VoteUsed/>)}</h3>
   </section>
 }
 export default PlayerSectionInTownSquare
