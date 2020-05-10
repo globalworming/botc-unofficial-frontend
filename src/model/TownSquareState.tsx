@@ -6,6 +6,8 @@ interface TownSquareState {
   isDay:  boolean,
   turn: number,
   id: string,
+  goodWon: boolean,
+  evilWon: boolean,
   isStoryTeller: boolean
 }
 

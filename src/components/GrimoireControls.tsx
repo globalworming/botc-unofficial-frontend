@@ -43,6 +43,8 @@ const GrimoireControls = () => {
   function apply(response: TownSquareState) {
     setIsDay(response.isDay)
     setTurn(response.turn)
+    setGoodWins(response.goodWon)
+    setEvilWins(response.evilWon)
   }
 
   const startGame = () => {
@@ -58,10 +60,18 @@ const GrimoireControls = () => {
 
   const evilWins = () => {
     setEvilWins(true)
+    if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/evilWins', {method: "post"})
+      .then(response => response.json())
+      .then(response => apply(response))
+      .catch(error => null);
   }
 
   const goodWins = () => {
     setGoodWins(true)
+    if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/goodWins', {method: "post"})
+      .then(response => response.json())
+      .then(response => apply(response))
+      .catch(error => null);
   }
 
   function assignCharacters() {

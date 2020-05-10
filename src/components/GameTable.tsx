@@ -102,7 +102,7 @@ const GameTable = () => {
   const debug = {gameTableId, players, turn, isDay, isStoryTeller, you};
   return (
     <>
-      {turn === 0 && <a href={"/gameTable/" + gameTableId}>invite link</a>}
+      {turn === 0 && isStoryTeller && <a href={"/gameTable/" + gameTableId}>invite link</a>}
       {isStoryTeller && <>
         <section className={"grimoire"}>
           <h2>
