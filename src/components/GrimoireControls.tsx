@@ -4,6 +4,7 @@ import StartingCharacters from "./StartingCharacters";
 import Button from "react-bootstrap/Button";
 import React from "react";
 import TownSquareState from "../model/TownSquareState";
+import {Redirect} from "react-router";
 
 const GrimoireControls = () => {
 
@@ -12,6 +13,16 @@ const GrimoireControls = () => {
   const [players, setPlayers] = useGlobalState("players");
   const [isTestGameTable] = useGlobalState('isTestGameTable');
   const [gameTableId] = useGlobalState("gameTableId");
+  const [evilWon, setEvilWins] = useGlobalState("evilWins");
+  const [goodWon, setGoodWins] = useGlobalState("goodWins");
+
+  if (evilWon) {
+    return <Redirect to={"/evilWins"} />
+  }
+  if (goodWon) {
+    return <Redirect to={"/goodWins"} />
+  }
+
 
   const nextTurn = () => {
     const update: Array<Player> = Object.assign([], players);
@@ -45,6 +56,14 @@ const GrimoireControls = () => {
 
   }
 
+  const evilWins = () => {
+    setEvilWins(true)
+  }
+
+  const goodWins = () => {
+    setGoodWins(true)
+  }
+
   function assignCharacters() {
     const pickedCharacters = StartingCharacters.forNumberOfPlayers(players.length, isTestGameTable ? gameTableId : undefined);
     pickedCharacters.forEach((character, i) => {
@@ -71,7 +90,10 @@ const GrimoireControls = () => {
         <Button className={"startNextDay"} onClick={() => nextTurn()}>start the next day</Button>)}
     {turn > 0 && (isDay &&
         <Button className={"startNextNight"} onClick={() => nextTurn()}>start the next night</Button>)}
-  </section>;
+    <br/>
+    {turn > 0 && <Button className={"evilWins"} onClick={() => evilWins()}>evil wins</Button>}
+    {turn > 0 && <Button className={"goodWins"} onClick={() => goodWins()}>good wins</Button>}
+  </section>
 }
 
 export default GrimoireControls
