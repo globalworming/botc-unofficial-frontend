@@ -36,7 +36,8 @@ const GrimoireControls = () => {
 
   const startGame = () => {
     assignCharacters();
-    nextTurn()
+    setTurn(turn + 1)
+    setIsDay(false)
     if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/start', {method: "post"})
       .then(response => response.json())
       .then(response => apply(response))
