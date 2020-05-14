@@ -1,15 +1,16 @@
 # base image
 FROM node:12.2.0-alpine
 
-# set working directory
-WORKDIR /app
+# add `/node_modules/.bin` to $PATH
+ENV PATH /node_modules/.bin:$PATH
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+COPY . .
+RUN yarn install
+RUN yarn add serve
+RUN yarn build
+COPY build /build
+EXPOSE 3000
 
-# install and cache app dependencies
-COPY package.json /app/package.json
-RUN yarn install --silent
 
 # start app
-CMD ["npm", "start"]
+CMD ["yarn", "serve"]
