@@ -1,16 +1,14 @@
 # base image
 FROM node:12.2.0-alpine
-
 # add `/node_modules/.bin` to $PATH
 ENV PATH /node_modules/.bin:$PATH
 
-COPY . .
-RUN yarn install
-RUN yarn add serve
+COPY package.json /package.json
+RUN yarn install --production
+COPY src /src
+COPY public /public
 RUN yarn build
-COPY build /build
-EXPOSE 3000
-
+#COPY build .
 
 # start app
-CMD ["yarn", "serve"]
+ENTRYPOINT ["yarn", "serve"]
