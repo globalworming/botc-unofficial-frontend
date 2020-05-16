@@ -10,6 +10,7 @@ import RouteParams from "../model/RouteParams";
 import GrimoireControls from "./GrimoireControls";
 import TownSquareState from "../model/TownSquareState";
 import {useGlobalState} from "../state";
+import Urls from "../constants/Urls";
 import {Client, IMessage, StompSubscription} from '@stomp/stompjs';
 
 const GameTable = () => {
@@ -42,7 +43,6 @@ const GameTable = () => {
   );
 
   function getGame() {
-    console.log("fetching game")
     fetch('/api/gameTable/' + id)
       .then(response => response.json())
       .then(response => {
@@ -52,7 +52,7 @@ const GameTable = () => {
   }
 
   const client = new Client({
-    brokerURL: "ws://localhost:8080/ws",
+    brokerURL: Urls.WEBSOCKET,
     connectHeaders: {
       gameTableId
     },

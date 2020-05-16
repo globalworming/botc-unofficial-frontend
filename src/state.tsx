@@ -1,10 +1,9 @@
-import { createGlobalState } from 'react-hooks-global-state';
+import {createGlobalState} from 'react-hooks-global-state';
 import Player from "./model/Player";
 
 const initialPlayers: Array<Player> = [];
 
-
-export const { useGlobalState } = createGlobalState({
+export const {useGlobalState} = createGlobalState({
   evilWins: false,
   goodWins: false,
   isDay: true,
@@ -13,6 +12,5 @@ export const { useGlobalState } = createGlobalState({
   gameTableId: "",
   players: initialPlayers,
   turn: 0,
-  you: "",
-
+  you: ""
 });

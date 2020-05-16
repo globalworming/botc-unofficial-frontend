@@ -1,6 +1,4 @@
-import React, {useState} from 'react';
-import {Redirect} from "react-router";
-import TownSquareState from "../model/TownSquareState";
+import React from 'react';
 
 
 const GoodWins = () => {

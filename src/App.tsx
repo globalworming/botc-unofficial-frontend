@@ -1,5 +1,6 @@
 import React from "react";
 import Header from './components/Header';
+import Debug from './components/Debug';
 // import ChatHistory from './components/ChatHistory';
 // import ChatInput from './components/ChatInput';
 import GameTable from './components/GameTable';
@@ -38,6 +39,7 @@ const App = () => {
           <Route path="/" children={<Lobby/>}/>
         </Switch>
       </Router>
+      <Debug/>
       {
         //<ChatHistory chatHistory={messages}/><ChatInput send={onSendMessage}/>
       }

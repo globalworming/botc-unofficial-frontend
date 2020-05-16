@@ -7,8 +7,8 @@ import TownSquareState from "../model/TownSquareState";
 const PlayerSectionInGrimoire = () => {
 
   const [players, setPlayers] = useGlobalState("players");
-  const [isTestGameTable, setIsTestGameTable] = useGlobalState('isTestGameTable');
-  const [gameTableId, setGameTableId] = useGlobalState("gameTableId");
+  const [isTestGameTable] = useGlobalState('isTestGameTable');
+  const [gameTableId] = useGlobalState("gameTableId");
 
   function assignCharacter(id: string, value: string) {
     const update: Array<Player> = Object.assign([], players);
