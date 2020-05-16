@@ -1,9 +1,17 @@
 #!/bin/bash
 # https://www.freecodecamp.org/news/how-to-implement-runtime-environment-variables-with-create-react-app-docker-and-nginx-7f9d42a91d70/
 
+
+
 # Recreate config file
-targetFolder=./public
+targetFolder=.
+
+if [[ ! -z $1 ]] ; then
+  targetFolder=$1
+fi
+
 target=${targetFolder}/env-config.js
+
 
 rm -rf $target || true
 mkdir -p $targetFolder || true
