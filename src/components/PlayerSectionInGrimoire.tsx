@@ -10,6 +10,7 @@ const PlayerSectionInGrimoire = () => {
   const [players, setPlayers] = useGlobalState("players");
   const [isTestGameTable] = useGlobalState('isTestGameTable');
   const [gameTableId] = useGlobalState("gameTableId");
+  const [turn] = useGlobalState("turn");
 
   function assignCharacter(id: string, value: string) {
     const update: Array<Player> = Object.assign([], players);
@@ -63,8 +64,8 @@ const PlayerSectionInGrimoire = () => {
       .then(response => response.json())
       .then(response => apply(response))
       .catch(error => null);
-
   }
+
   function setAbility(id: string, value: string) {
     const update: Array<Player> = Object.assign([], players);
     const player = update.find(item => item.name === id);
@@ -79,43 +80,44 @@ const PlayerSectionInGrimoire = () => {
   }
 
 
-  return ( <> {
+  return (<> {
     players.map((player, index) =>
       <section key={index} className={"player player" + index}>
         <h3 className={"name"}>{player.name}</h3>
-        <select className={"isCharacter"} value={player.character}
-                onChange={e => assignCharacter(player.name, e.target.value)}>
-          <option value="unassigned">unassigned</option>
-          {Characters.map((character, i) => <option key={i} value={character}>{character}</option>)}
-        </select>
-        <label className={"poisoned"}><span role="img" aria-label="poisoned">🤢</span>
-          <input name="poisoned" type="checkbox" checked={player.poisoned}
-                 onChange={(e) => setPoisoned(player.name, e.target.checked)}/>
-        </label>
-        <label className={"mad"}><span role="img" aria-label="mad">🤯</span>
-          <input name="mad" type="checkbox" checked={player.mad}
-                 onChange={(e) => setMad(player.name, e.target.checked)}/>
-        </label>
-        <label className={"dead"}><span role="img" aria-label="dead">👻</span>
-          <input name="dead" type="checkbox" checked={player.dead}
-                 onChange={(e) => setDead(player.name, e.target.checked)}/>
-        </label>
-        {player.dead && <label className={"canVote"}><span role="img" aria-label="canVote">🗳️</span>
-          <input name="canVote" type="checkbox" checked={player.canVote}
-                 onChange={(e) => setCanVote(player.name, e.target.checked)}/>
-        </label>}
-        <label> Ability
-          <select className={"usedAbility"} value={player.ability}
-                  onChange={e => setAbility(player.name, e.target.value)}>
-            <option value="not used">not used/does not apply</option>
-            <option value="used one shot ability">used one shot ability</option>
-            <option value="used daily ability">used daily ability</option>
-            <option value="used nightly ability">used nightly ability</option>
+        {turn > 0 && <>
+          <select className={"isCharacter"} value={player.character}
+                  onChange={e => assignCharacter(player.name, e.target.value)}>
+            <option value="unassigned">unassigned</option>
+            {Characters.map((character, i) => <option key={i} value={character}>{character}</option>)}
           </select>
-        </label>
-
+          <label className={"poisoned"}><span role="img" aria-label="poisoned">🤢</span>
+            <input name="poisoned" type="checkbox" checked={player.poisoned}
+                   onChange={(e) => setPoisoned(player.name, e.target.checked)}/>
+          </label>
+          <label className={"mad"}><span role="img" aria-label="mad">🤯</span>
+            <input name="mad" type="checkbox" checked={player.mad}
+                   onChange={(e) => setMad(player.name, e.target.checked)}/>
+          </label>
+          <label className={"dead"}><span role="img" aria-label="dead">👻</span>
+            <input name="dead" type="checkbox" checked={player.dead}
+                   onChange={(e) => setDead(player.name, e.target.checked)}/>
+          </label>
+          {player.dead && <label className={"canVote"}><span role="img" aria-label="canVote">🗳️</span>
+            <input name="canVote" type="checkbox" checked={player.canVote}
+                   onChange={(e) => setCanVote(player.name, e.target.checked)}/>
+          </label>}
+          <label> Ability
+            <select className={"usedAbility"} value={player.ability}
+                    onChange={e => setAbility(player.name, e.target.value)}>
+              <option value="not used">not used/does not apply</option>
+              <option value="used one shot ability">used one shot ability</option>
+              <option value="used daily ability">used daily ability</option>
+              <option value="used nightly ability">used nightly ability</option>
+            </select>
+          </label>
+        </>}
       </section>
     )
-  } </> )
+  } </>)
 }
 export default PlayerSectionInGrimoire
