@@ -2,8 +2,11 @@
 # https://www.freecodecamp.org/news/how-to-implement-runtime-environment-variables-with-create-react-app-docker-and-nginx-7f9d42a91d70/
 
 # Recreate config file
-target=./public/env-config.js
-rm -rf $target
+targetFolder=./public
+target=${targetFolder}/env-config.js
+
+rm -rf $target || true
+mkdir -p $targetFolder || true
 touch $target
 
 # Add assignment
@@ -13,6 +16,11 @@ echo "window._env_ = {" >> $target
 # Each line represents key=value pairs
 while read -r line || [[ -n "$line" ]];
 do
+
+  # skip empty lines
+  if [[ -z $line ]] ; then
+    continue
+  fi
 
   # skip comments
   if [[ $line = \#* ]] ; then
