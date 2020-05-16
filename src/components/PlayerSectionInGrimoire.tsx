@@ -3,6 +3,7 @@ import React from "react";
 import {useGlobalState} from "../state";
 import Player from "../model/Player";
 import TownSquareState from "../model/TownSquareState";
+import Urls from "../constants/Urls";
 
 const PlayerSectionInGrimoire = () => {
 
@@ -44,7 +45,7 @@ const PlayerSectionInGrimoire = () => {
       player.dead = value
       setPlayers(update)
     }
-    if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/player/' + id + "/kill", {method: "post"})
+    if (!isTestGameTable) fetch(Urls.killPlayer(gameTableId, id), {method: "post"})
       .then(response => response.json())
       .then(response => apply(response))
       .catch(error => null);
@@ -58,7 +59,7 @@ const PlayerSectionInGrimoire = () => {
       player.canVote = value
       setPlayers(update)
     }
-    if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/player/' + id + "/voted", {method: "post"})
+    if (!isTestGameTable) fetch(Urls.playerHasVoted(gameTableId, id), {method: "post"})
       .then(response => response.json())
       .then(response => apply(response))
       .catch(error => null);

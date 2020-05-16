@@ -43,14 +43,14 @@ const GameTable = () => {
   );
 
   function getGame() {
-    fetch('/api/gameTable/' + id)
+    fetch(Urls.getGameTable(id))
       .then(response => response.json())
       .then(response => {
         apply(response)
       })
       .catch(error => null);
   }
-
+  console.log("expect", "ws://localhost:8080/ws", Urls.WEBSOCKET)
   const client = new Client({
     brokerURL: Urls.WEBSOCKET,
     connectHeaders: {

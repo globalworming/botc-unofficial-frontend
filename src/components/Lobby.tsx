@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Redirect} from "react-router";
 import TownSquareState from "../model/TownSquareState";
+import Urls from "../constants/Urls";
 
 
 const Lobby = () => {
@@ -10,7 +11,7 @@ const Lobby = () => {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    fetch("/api/gameTables?id=" + name , {method: 'post'})
+    fetch(Urls.createGameTable(name), {method: 'post'})
       .then(response => response.json())
       .then(response => apply(response))
       .catch(error => null);

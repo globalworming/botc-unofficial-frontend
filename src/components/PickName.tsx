@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {useGlobalState} from "../state";
 import TownSquareState from "../model/TownSquareState";
+import Urls from "../constants/Urls";
 
 const PickName = () => {
 
@@ -12,7 +13,7 @@ const PickName = () => {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    fetch('/api/gameTable/' + gameTableId + '/players?name=' + localYou, {method: "post"})
+    fetch(Urls.joinGame(gameTableId, localYou), {method: "post"})
       .then(response => response.json())
       .then(response => apply(response))
       .catch(error => null);

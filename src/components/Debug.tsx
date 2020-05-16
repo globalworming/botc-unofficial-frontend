@@ -7,12 +7,10 @@ const Debug = () => {
         <>
           <h2>debug info</h2>
           <dl>
-            {Object.entries(Urls).map((t, k) => <React.Fragment key={k}>
-              <dt key={"dt" + k}>{t[0]}:</dt>
-              <dd key={"dd" + k}>
-                <pre>{JSON.stringify(t[1], null, 2)} </pre>
-              </dd>
-            </React.Fragment>)}
+              <dt>api</dt>
+              <dd>{Urls.API}</dd>
+              <dt>websocket</dt>
+              <dd>{Urls.WEBSOCKET}</dd>
           </dl>
         </>
     )

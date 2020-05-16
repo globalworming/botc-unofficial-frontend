@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import React from "react";
 import TownSquareState from "../model/TownSquareState";
 import {Redirect} from "react-router";
+import Urls from "../constants/Urls";
 
 const GrimoireControls = () => {
 
@@ -34,7 +35,7 @@ const GrimoireControls = () => {
     setPlayers(update);
     setTurn(turn + 1)
     setIsDay(!isDay)
-    if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/nextTurn', {method: "post"})
+    if (!isTestGameTable) fetch(Urls.nextTurn(gameTableId), {method: "post"})
       .then(response => response.json())
       .then(response => apply(response))
       .catch(error => null);
@@ -51,7 +52,7 @@ const GrimoireControls = () => {
     assignCharacters();
     setTurn(turn + 1)
     setIsDay(false)
-    if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/start', {method: "post"})
+    if (!isTestGameTable) fetch(Urls.startGame(gameTableId), {method: "post"})
       .then(response => response.json())
       .then(response => apply(response))
       .catch(error => null);
@@ -60,7 +61,7 @@ const GrimoireControls = () => {
 
   const evilWins = () => {
     setEvilWins(true)
-    if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/evilWins', {method: "post"})
+    if (!isTestGameTable) fetch(Urls.evilWins(gameTableId), {method: "post"})
       .then(response => response.json())
       .then(response => apply(response))
       .catch(error => null);
@@ -68,7 +69,7 @@ const GrimoireControls = () => {
 
   const goodWins = () => {
     setGoodWins(true)
-    if (!isTestGameTable) fetch('/api/gameTable/' + gameTableId + '/goodWins', {method: "post"})
+    if (!isTestGameTable) fetch(Urls.goodWins(gameTableId), {method: "post"})
       .then(response => response.json())
       .then(response => apply(response))
       .catch(error => null);
