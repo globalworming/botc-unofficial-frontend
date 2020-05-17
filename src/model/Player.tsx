@@ -1,4 +1,5 @@
 interface Player {
+  canNominate: boolean;
   name: string
   character: string,
   ability: string,

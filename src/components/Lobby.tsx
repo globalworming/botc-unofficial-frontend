@@ -6,11 +6,12 @@ import Urls from "../constants/Urls";
 
 const Lobby = () => {
 
-  const [name, setName] = useState("")
-  const [redirect, setRedirect] = useState(false)
+  const [name, setName] = useState("");
+  const [redirect, setRedirect] = useState(false);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (name === "bdd-1") return setRedirect(true);
     fetch(Urls.createGameTable(name), {method: 'post'})
       .then(response => response.json())
       .then(response => apply(response))
@@ -40,6 +41,6 @@ const Lobby = () => {
       </section>
     </>
   );
-}
+};
 
 export default Lobby;
